@@ -32,7 +32,7 @@ def time_message(client):
 
 def main(cmds):
     host = cmds.hostname if cmds.hostname != None else LOCALHOST
-    client = MqttClient(None, LOCALHOST, SUBSCRIBE_TOPIC, on_message)
+    client = MqttClient(None, host, SUBSCRIBE_TOPIC, on_message)
     avg = 0
     for i in xrange(cmds.number):
         avg += time_message(client)
