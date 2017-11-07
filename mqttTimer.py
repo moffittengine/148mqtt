@@ -41,5 +41,4 @@ def main(cmds):
 
 if __name__ == "__main__":
     cmds = parse_args()
-    print cmds
     main(cmds)
