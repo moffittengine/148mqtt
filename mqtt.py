@@ -36,17 +36,16 @@ class mqtt:
 if __name__ == "__main__":
     host   = 'localhost'
     topic  = 'test148'
-    
+
     # Subscriber Setup
     listen = mqtt('a', host, topic, 1, None)
     time.sleep(1)
 
     # Publisher Setup
     send = mqtt('b', host, topic, 0, None)
-    
+
     # Send and disconnect
     send.publish("\n\nTEST MESSAGE HAS BEEN SENT\n\n")
     print("Message Sent")
     time.sleep(4)
     send.disconnect()
-    

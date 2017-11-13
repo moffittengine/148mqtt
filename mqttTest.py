@@ -13,7 +13,7 @@ topic     = '/test148/tripTime'
 totals  = 0
 counter = 0
 
-def callback(client, userdata, message): 
+def callback(client, userdata, message):
     elapsed(dt.datetime.now().microsecond);
 
 def elapsed(end):
@@ -47,7 +47,7 @@ def testLocal(host, topic, loopCount):
     # Send N messages and get the Average
     for i in range(0, loopCount):
         time.sleep(2)
-        start = dt.datetime.now().microsecond   
+        start = dt.datetime.now().microsecond
         send.publish("SendMessage: %d" %i)
 
     time.sleep(1)
