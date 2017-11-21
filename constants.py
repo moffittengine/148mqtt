@@ -3,3 +3,38 @@ ECHO_TOPIC = "/test148/echo"
 SUBSCRIBE_TOPIC = "/test148/tripTime"
 LOCALHOST = 'localhost'
 WEBHOST = 'test.mosquitto.org'
+
+# OPTIONAL
+# master sees resource usage
+HEARTBEAT_TOPIC = "/resources"
+
+
+# messages to a specific node sent here
+SLAVE_TOPIC = "/slave"
+# broadcast to all clients
+BROADCAST_TOPIC = "/broadcast"
+# messages to master
+MASTER_TOPIC = "/master"
+
+# HEADER FOR MESSAGE
+# <---- 36 CHAR FOR ID ----->|<---------36 CHAR FOR OPERATION--------->
+
+MASTER_ID = "111111111111111111111111111111111111"
+
+REJECT_MESSAGE_RESPONSE = "3a406094-6bdb-49a7-8863-b2a6d1ab4bd5"
+ACCEPT_MESSAGE_RESPONSE = "f1a285e5-f06b-4e9b-8e8f-80a01b343859"
+NO_RESPONSE = "000000000000000000000000000000000000"
+GET_ACTIVE_CLIENTS = "1001544c-93d5-4ae6-ad64-fb4fcd36b21a"
+
+BUSY_STATUS = "BUSY"
+PENDING_STATUS = "PENDING"
+READY_STATUS = "READY"
+
+UUID_LENGTH = 36
+PAYLOAD_START = UUID_LENGTH*2
+OPERATIONS_MAP = {
+    "d837d30c-c1df-4632-bb9a-fc27e113e97e": "SUM",
+    "SUM": "d837d30c-c1df-4632-bb9a-fc27e113e97e",
+    "5ac8c0fa-42d8-43c8-933e-d001e277c2d1": "PRODUCT",
+    "PRODUCT": "5ac8c0fa-42d8-43c8-933e-d001e277c2d1",
+}
