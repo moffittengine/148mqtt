@@ -41,6 +41,7 @@ class Master:
         self.client = mqtt.Client()
         self.client.connect(host)
         self.client.on_message = self.on_message
+        self.master_id = str(hex(uuid.getnode()))
 
         self.status_lock = threading.Lock()
         self.slave_statuses = {}
@@ -55,10 +56,10 @@ class Master:
             (MASTER_TOPIC, 0),
         ])
         self.client.loop_start()
-        self.broadcast(GET_ACTIVE_CLIENTS)
+        self.broadcast("%s%s" % (self.master_id, GET_ACTIVE_CLIENTS))
         time.sleep(2*timeout) # fixed time to wait for messages to come back
         #print len(self.ready_slaves.lookup)
-        self.range_sum(10, 12984)
+        self.range_sum(10, 1000)
         time.sleep(10)
         #self.shell()
 
@@ -99,7 +100,7 @@ class Master:
                 self.slave_job[worker_id] = work_id
                 self.aggregate_running[work_id] += 1
                 self.status_lock.release()
-                self.distribute(worker_id, msg)
+                self.distribute(worker_id, "%s%s" % (self.master_id, msg))
 
         while (True):
             self.aggregate_lock[work_id].acquire()

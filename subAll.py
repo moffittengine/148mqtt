@@ -16,8 +16,8 @@ def parse_args():
 
 def on_message(client, userdata, message):
     payload = message.payload.decode("utf-8")
-    client_id = payload[0:UUID_LENGTH]
-    operation = payload[UUID_LENGTH:PAYLOAD_START]
+    client_id = payload[0:CLIENT_ID_LENGTH]
+    operation = payload[CLIENT_ID_LENGTH:PAYLOAD_START]
     msg = payload[PAYLOAD_START:]
     print(
         "--------------------------------\n" \

@@ -52,11 +52,11 @@ class Slave:
     def work(self, message, sleeptime=0):
         print "recieved work item: \n%s\n\n" % message
         start_time = time.time()
-        key = message[0:CLIENT_ID_LENGTH]
+        key = message[CLIENT_ID_LENGTH:PAYLOAD_START]
         ret = ""
         if key in OPERATIONS_MAP:
             func = OPERATIONS_MAP[key]
-            msg = message[CLIENT_ID_LENGTH:]
+            msg = message[PAYLOAD_START:]
             if func == "SUM":
                 s = self.func_sum(msg)
                 ret = "%s%s" % (key, str(s))
