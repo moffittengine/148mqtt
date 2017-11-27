@@ -12,7 +12,7 @@ class Slave:
     def __init__(self, host):
         self.client = mqtt.Client()
         self.client.connect(host)
-        self.worker_id = str(uuid.uuid4())
+        self.worker_id = str(hex(uuid.getnode())) # get MAC address
         self.client.on_message = self.on_message
         self.topic = "/".join([SLAVE_TOPIC, self.worker_id])
         print "got here1"
@@ -52,11 +52,11 @@ class Slave:
     def work(self, message, sleeptime=0):
         print "recieved work item: \n%s\n\n" % message
         start_time = time.time()
-        key = message[0:UUID_LENGTH]
+        key = message[0:CLIENT_ID_LENGTH]
         ret = ""
         if key in OPERATIONS_MAP:
             func = OPERATIONS_MAP[key]
-            msg = message[UUID_LENGTH:]
+            msg = message[CLIENT_ID_LENGTH:]
             if func == "SUM":
                 s = self.func_sum(msg)
                 ret = "%s%s" % (key, str(s))

@@ -58,7 +58,7 @@ class Master:
         self.broadcast(GET_ACTIVE_CLIENTS)
         time.sleep(2*timeout) # fixed time to wait for messages to come back
         #print len(self.ready_slaves.lookup)
-        self.range_sum(10, 1000)
+        self.range_sum(10, 12984)
         time.sleep(10)
         #self.shell()
 
@@ -83,7 +83,7 @@ class Master:
         tasks = Queue.Queue()
         if high - low > self.ready_slaves.size():
             i = 0
-            inc = (high - low + 1)/self.ready_slaves.size()
+            inc = (high - low + 2)/self.ready_slaves.size()
             while (i < high - low + 1):
                 r2 = r[i:i+inc]
                 i += inc
@@ -120,8 +120,8 @@ class Master:
 
     def on_message(self, client, userdata, message):
         payload = str(message.payload.decode("utf-8"))
-        worker_id = payload[0:UUID_LENGTH]
-        operation = payload[UUID_LENGTH:PAYLOAD_START]
+        worker_id = payload[0:CLIENT_ID_LENGTH]
+        operation = payload[CLIENT_ID_LENGTH:PAYLOAD_START]
         message = payload[PAYLOAD_START:]
 
         if operation == GET_ACTIVE_CLIENTS:
