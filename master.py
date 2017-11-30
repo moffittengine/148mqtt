@@ -58,20 +58,9 @@ class Master:
         self.client.loop_start()
         self.broadcast("%s%s" % (self.master_id, GET_ACTIVE_CLIENTS))
         time.sleep(2*timeout) # fixed time to wait for messages to come back
-        #print len(self.ready_slaves.lookup)
-        self.range_sum(10, 1000)
-        time.sleep(10)
-        #self.shell()
 
     def broadcast(self, message):
         self.client.publish(BROADCAST_TOPIC, message)
-
-    def shell(self):
-        while (True):
-            i = str(raw_input('master> '))
-            args = i.split(' ')
-            if len(args) == 0:
-                continue
 
     # low, high inclusive
     def range_sum(self, low, high):
@@ -108,15 +97,12 @@ class Master:
                 break
             self.aggregate_lock[work_id].release()
 
-        print "finished sum"
-        print self.aggregate[work_id]
-        print "expected: " + str(sum(r))
+        print "Finished sum of integers from %d to %d inclusive" % (low, high)
+        print "Output after distributing work: %d" % self.aggregate[work_id]
+        print "Expected output: " + str(sum(r))
 
 
     def distribute(self, worker_id, message):
-        #print worker_id
-        #print message
-        #print ""
         self.client.publish("/".join([SLAVE_TOPIC, worker_id]), message)
 
     def on_message(self, client, userdata, message):
@@ -135,16 +121,16 @@ class Master:
             self.status_lock.acquire()
             if worker_id in self.slave_statuses:
                 job = self.slave_job[worker_id]
-                #print "Worker %s returned with:\n    %s\n" % (worker_id, message)
-                print "id: " + worker_id
-                print "op: " + operation
-                print "ms: " + message
+                print "Message recieved from worker"
+                print "Worker id: " + worker_id
+                print "Worker operation: " + operation
+                print "Worker message: " + message
+                print "\n"
                 self.aggregate_lock[job].acquire()
                 self.aggregate_running[job] -= 1
                 if operation == OPERATIONS_MAP["SUM"]:
                     self.aggregate[job] += int(message)
                 self.aggregate_lock[job].release()
-                #print "message:\n    %s" % payload
                 del self.slave_statuses[worker_id]
                 del self.slave_job[worker_id]
             self.status_lock.release()
@@ -160,6 +146,7 @@ def parse_args():
 def main(cmds):
     host = cmds.hostname if cmds.hostname != None else LOCALHOST
     m = Master(host)
+    m.range_sum(10, 1000)
 
 
 if __name__ == "__main__":

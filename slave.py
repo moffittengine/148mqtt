@@ -15,22 +15,15 @@ class Slave:
         self.worker_id = str(hex(uuid.getnode())) # get MAC address
         self.client.on_message = self.on_message
         self.topic = "/".join([SLAVE_TOPIC, self.worker_id])
-        print "got here1"
         self.client.subscribe([
             (self.topic, 0), # slave topic
             (BROADCAST_TOPIC, 0)
         ])
-        print "got here2"
         while(True):
             self.client.loop()
-        #self.client.loop_start()
-    
-    #def send_heartbeat(self, uuid):
-    #    self.client.publish(HEARTBEAT_TOPIC, "%s,%s" %
-    #        (uuid, BUSY_STATUS if _WORKING else READY_STATUS))
 
     def on_message(self, client, userdata, message):
-        print "got message"
+        print "Recieved a message"
         payload = message.payload.decode("utf-8")
         if (message.topic == self.topic):
             self.accept_message()
@@ -50,7 +43,7 @@ class Slave:
         self.send_master(ACCEPT_MESSAGE_RESPONSE)
 
     def work(self, message, sleeptime=0):
-        print "recieved work item: \n%s\n\n" % message
+        print "Recieved work item: \n%s\n\n" % message
         start_time = time.time()
         key = message[CLIENT_ID_LENGTH:PAYLOAD_START]
         ret = ""
