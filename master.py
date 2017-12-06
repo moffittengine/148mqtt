@@ -41,7 +41,8 @@ class Master:
         self.client = mqtt.Client()
         self.client.connect(host)
         self.client.on_message = self.on_message
-        self.master_id = str(hex(uuid.getnode()))
+        self.master_id = '0x{0:012x}'.format(uuid.getnode())
+        #self.master_id = str(hex(uuid.getnode()))
 
         self.status_lock = threading.Lock()
         self.slave_statuses = {}

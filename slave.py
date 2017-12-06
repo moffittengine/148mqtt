@@ -12,7 +12,8 @@ class Slave:
     def __init__(self, host):
         self.client = mqtt.Client()
         self.client.connect(host)
-        self.worker_id = str(hex(uuid.getnode())) # get MAC address
+        #self.worker_id = str(hex(uuid.getnode())) # get MAC address
+        self.worker_id = '0x{0:012x}'.format(uuid.getnode())
         self.client.on_message = self.on_message
         self.topic = "/".join([SLAVE_TOPIC, self.worker_id])
         self.client.subscribe([
